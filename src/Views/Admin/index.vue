@@ -4,8 +4,8 @@
  <div class="main-header anim" style="--delay: 0s">Overview</div>
  <div class="main-blogs">
   <div class="main-blog anim" style="--delay: .1s">
-   <div class="main-blog__title">TOTAL ORDERS</div>
-   <div class="main-blog__title2">54</div>
+   <div class="main-blog__title">TOTAL STAFF</div>
+   <div class="main-blog__title2">{{total_staff}}</div>
    <div class="main-blog__author">
     <div class="author-detail">
      <div class="author-name">Order Management</div>
@@ -15,8 +15,8 @@
 
   </div>
   <div class="main-blog anim" style="--delay: .2s">
-     <div class="main-blog__title">TOTAL STOCK</div>
-     <div class="main-blog__title2">80</div>
+     <div class="main-blog__title">TOTAL ITEMS</div>
+     <div class="main-blog__title2">{{stocks}}</div>
      <div class="main-blog__author tips">
       <div class="author-detail">
        <div class="author-name">Stock Management</div>
@@ -35,8 +35,8 @@
     </div>
    </div>
    <div class="video-by">Supplier Management</div>
-   <div class="video-name">TOTAL SUPPLIERS</div>
-   <div class="video-name2">05</div>
+   <div class="video-name">TOTAL SHIPPING ITEMS</div>
+   <div class="video-name2">{{total_shipping}}</div>
   </div>
   <div class="video anim" style="--delay: .5s">
 
@@ -50,8 +50,8 @@
     </div>
    </div>
    <div class="video-by">User Management</div>
-   <div class="video-name">TOTAL STAFF</div>
-   <div class="video-name2">10</div>
+   <div class="video-name">TOTAL STAFF MEMBERS</div>
+   <div class="video-name2">{{total_staff_members}}</div>
   </div>
   <div class="video anim" style="--delay: .6s">
 
@@ -65,8 +65,8 @@
     </div>
    </div>
    <div class="video-by">Supplier Management</div>
-   <div class="video-name">TOTAL ITEMS</div>
-   <div class="video-name2">75</div>
+   <div class="video-name">TOTAL STOCK MANAGERS</div>
+   <div class="video-name2">{{total_stock_managers}}</div>
   </div>
   <div class="video anim" style="--delay: .7s">
 
@@ -80,8 +80,8 @@
     </div>
    </div>
    <div class="video-by">DELIVERY Management</div>
-   <div class="video-name">TOTAL SHIPMENTS</div>
-   <div class="video-name2">24</div>
+   <div class="video-name">TOTAL SUPPLIERS</div>
+   <div class="video-name2">{{total_suppliers}}</div>
   </div>
  </div>
 </div>
@@ -95,23 +95,67 @@
 
 <script>
 import {mapActions,mapGetters} from 'vuex'
+import staffApis from "../../apis/modules/admin_pais/staff_apis";
+import shippingItemApis from "../../apis/modules/admin_pais/shipping_item";
 export default {
   name: "admin_home",
   data(){
     return{
       total_staff:0,
+      total_staff_members:0,
       total_shipping:0,
+      total_suppliers:0,
+      total_items:0,
+      total_orders:0,
+      total_stock_managers:0,
+      stocks:0,
+      selected_role:'',
+      status:'',
+      staff:[],
+      shipping_items:[]
 
     }
   },
   async mounted() {
-    console.log('Component mounted.');
-    console.log(localStorage.getItem('JWT'))
-    await this.autoLogin()
+    await this.getAllStaff()
+    await this.getAllShippingItems()
+    await this.getAllStocks()
   },
   methods: {
-    ...mapActions(['autoLogin'])
+    ...mapActions(['autoLogin']),
+    async getAllStaff(selected_role) {
+      try {
+        this.staff = (await staffApis.getAllStaff(selected_role)).data.data.users
+        this.total_suppliers = this.staff.filter(e=>e.account_type === 'supplier').length
+        this.total_stock_managers = this.staff.filter(e=>e.account_type === 'stock-manager').length
+        this.total_staff_members = this.staff.filter(e=>e.account_type === 'staff').length
+        this.total_staff = this.staff.length
+      } catch (e) {
+
+      }
+    },
+    async getAllShippingItems(status) {
+      try {
+        this.is_table_loading = true
+        this.shipping_items = (await shippingItemApis.getAllShippingItems(status)).data.data.ShippingItems
+        this.total_shipping = this.shipping_items.length
+      } catch (e) {
+
+      }
+      this.is_table_loading = false
+    },
+    async getAllStocks() {
+      try {
+        this.is_table_loading = true
+        this.stocks = (await shippingItemApis.getStock()).data.length
+      } catch (e) {
+
+      }
+      this.is_table_loading = false
+    },
   },
+
+
 }
 </script>
 
