@@ -6,7 +6,7 @@
     <div class="side-wrapper">
       <div class="side-title">MENU</div>
       <div class="side-menu">
-        <a class="sidebar-link discover is-active" disabled @click="$router.push('/admin/home')">
+        <a class="sidebar-link discover" :class="{'is-active':currentRouter === 'home'}" @click="navigateTo('home')">
           <svg fill="currentColor" viewBox="0 0 24 24">
             <path
               d="M9.135 20.773v-3.057c0-.78.637-1.414 1.423-1.414h2.875c.377 0 .74.15 1.006.414.267.265.417.625.417 1v3.057c-.002.325.126.637.356.867.23.23.544.36.87.36h1.962a3.46 3.46 0 002.443-1 3.41 3.41 0 001.013-2.422V9.867c0-.735-.328-1.431-.895-1.902l-6.671-5.29a3.097 3.097 0 00-3.949.072L3.467 7.965A2.474 2.474 0 002.5 9.867v8.702C2.5 20.464 4.047 22 5.956 22h1.916c.68 0 1.231-.544 1.236-1.218l.027-.009z"/>
@@ -38,7 +38,8 @@
           </svg>
           Supplier
         </a>
-        <a v-if="currentUser && currentUser.account_type === 'admin'" class="sidebar-link" @click="$router.push('/admin/staff')">
+        <a v-if="currentUser && currentUser.account_type === 'admin'" class="sidebar-link"
+           :class="{'is-active':currentRouter === 'staff'}" @click="navigateTo('staff')">
           <svg class="bi bi-people" fill="currentColor" height="32" viewBox="0 0 16 16" width="32"
                xmlns="http://www.w3.org/2000/svg">
             <path
@@ -46,7 +47,8 @@
           </svg>
           Users
         </a>
-        <a v-if="currentUser && currentUser.account_type === 'admin'" class="sidebar-link" @click="$router.push('/admin/tracking')">
+        <a v-if="currentUser && currentUser.account_type === 'admin'" class="sidebar-link"
+           :class="{'is-active':currentRouter === 'tracking'}" @click="navigateTo('tracking')">
           <svg class="bi bi-people" fill="currentColor" height="32" viewBox="0 0 16 16" width="32"
                xmlns="http://www.w3.org/2000/svg">
             <path
@@ -95,9 +97,9 @@
     </div>
 
     <button class="sidebar-link"
-            @click="logoutUser"
             style="background-color:#1f1d2b; border-radius: 40px; border-color: rgb(192, 192, 192);; color: rgb(192, 192, 192);"
-            type="">
+            type=""
+            @click="logoutUser">
       <svg fill="none" height="20" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
            style="background-color: #1f1d2b;" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
         <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
@@ -120,10 +122,15 @@ export default {
   name: "sidebar",
   mixins: [ToastMixin],
   data() {
-    return {}
+    return {
+      selected_link :'sidebar-link',
+      normal_link: 'sidebar-link',
+      currentRouter: this.$router.currentRoute.path.split('/')[2]
+    }
   },
   computed: {
-    ...mapGetters(['currentUser'])
+    ...mapGetters(['currentUser']),
+
   },
   methods: {
     ...mapActions(['logout']),
@@ -134,7 +141,15 @@ export default {
       } catch (e) {
         this.danger(e.message, 'error')
       }
+    },
+    navigateTo(route) {
+      `/admin/${route}`
+      this.currentRouter = route
+      this.$router.push(route)
     }
+  },
+  mounted() {
+    console.log(this.currentRouter)
   }
 
 }
