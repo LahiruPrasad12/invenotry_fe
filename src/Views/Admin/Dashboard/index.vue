@@ -28,23 +28,15 @@
 
 <script>
 import {mapActions,mapGetters} from 'vuex'
-import staffApis from "../../../apis/modules/admin_pais/staff_apis";
 export default {
   name: "index",
-  data(){
-    return{
-      selected_role:''
-    }
-  },
-  // methods: {
-  //   ...mapActions(['autoLogin'])
-  // },
-  methods:{
-
+  methods: {
+    ...mapActions(['autoLogin'])
   },
 
   mounted() {
-
+    console.log('ava');
+    console.log(localStorage.getItem('JWT'))
   }
 }
 </script>

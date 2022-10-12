@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import authAPI from "../apis/modules/auth_apis";
+import authAPI from "@/apis/modules/auth_apis";
 import router from "../router";
 
 

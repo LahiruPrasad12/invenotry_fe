@@ -1,22 +1,9 @@
 import AdminHome from '../../Views/Admin/index'
 import AdminStaff from '../../Views/Admin/Staff/index'
 import Tracking from '../../Views/Admin/Tracking/index'
-import Login from '../../Views/auth/login'
 import Store from '../../store/index'
 
 export default [
-  {
-    path: '/',
-    name: 'login',
-    component: Login,
-    // beforeEach:async(to,_,next)=>{
-    //   if(Store.getters.currentUser == null){
-    //     next('/')
-    //   }else {
-    //     next()
-    //   }
-    // }
-  },
   {
     path: '/admin/home',
     name: 'admin_home',
