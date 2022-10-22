@@ -201,7 +201,7 @@ export default {
       doc.text(`All Items : ${this.shipping_items.length}`, 10, 60).setFontSize(12);
       doc.text(`Initiated Items : ${initiateItems.length}`, 10, 65).setFontSize(12);
       doc.text(`Pending Items : ${pendingItems.length}`, 10, 70).setFontSize(12);
-      doc.text(`Pending Items : ${deliveredItem.length}`, 10, 75).setFontSize(12);
+      doc.text(`Deliverd Items : ${deliveredItem.length}`, 10, 75).setFontSize(12);
       doc.text(`Report Generated Date - ${dateStr} `, 10, 80).setFontSize(12);
       doc.save(`Shipping-Details-Report_${dateStr}.pdf`);
 

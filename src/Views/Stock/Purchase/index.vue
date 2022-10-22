@@ -2,20 +2,20 @@
   <div >
     <div class="main-container" style="width: 1000px;">
       <div class="anim" style="--delay:0.2s;">
-        <h1 style="text-align:center; font-size: 30px; color: white; margin-top: 2%; font-weight: 600;">Stock Management</h1>
+        <h1 style="text-align:center; font-size: 30px; color: white; margin-top: 2%; font-weight: 600;">Supply Request Management</h1>
         <br/><br/>
       </div>
       <div class="anim" style="--delay:0.2s;">
         <header class="card-header" style="background-color: rgba(21, 20, 26, 0.63); border-radius: 20px">
           <div class="card-header-title">
             <div class="card-header-title">
-              <div style="font-size: 25px; color: white;">Stocks</div>
+              <div style="font-size: 25px; color: white;">Requests</div>
               <div class="search-bar">
                 <input type="text" placeholder="Search Stocks" style="margin-left:15%;">
               </div>
             </div>
             <div class="float-end">
-              <b-button  type="is-success" @click="makeRequest">Add</b-button>
+              <b-button  type="is-success" @click="makeRequest">Create</b-button>
               <b-button  type="is-info" @click="generatePDF">Generate Report</b-button>
             </div>
           </div>

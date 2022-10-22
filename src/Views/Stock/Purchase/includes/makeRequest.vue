@@ -4,7 +4,7 @@
              aria-role="dialog" close-button-aria-label="Close" has-modal-card trap-focus>
       <div class="card">
         <header class="card-header" style="font-weight:700; font-size: 20px; color: white;">
-          Add New Stock
+          Create New Request
         </header>
         <div class="card-content">
           <template>
@@ -13,16 +13,16 @@
                 <b-row>
                   <b-col md="6">
                     <validation-provider #default="{ errors }" name="qty" rules="required">
-                      <b-field :message="errors[0]" :type="errors[0] ? 'is-danger' : 'is-success'" label="Item*">
+                      <b-field :message="errors[0]" :type="errors[0] ? 'is-danger' : 'is-success'" label="*Seller">
                         <v-select :options="item" v-model="form.supplier_id" style="color: rgb(180, 180, 180);"
-                                  placeholder="Select an Item">
+                                  placeholder="Select a Seller">
                         </v-select>
                       </b-field>
                     </validation-provider>
                   </b-col>
                   <b-col md="6">
                     <validation-provider #default="{ errors }" name="name" rules="required">
-                      <b-field :message="errors[0]" :type="errors[0]?'is-danger':'is-success'" label="*Quantity">
+                      <b-field :message="errors[0]" :type="errors[0]?'is-danger':'is-success'" label="*Due Date">
                         <b-input v-model="form.due_date" maxlength="50" min="0" placeholder="e.g. 12"
                                  type="date">
                         </b-input>
@@ -31,16 +31,16 @@
                   </b-col>
                   <b-col md="12">
                     <validation-provider #default="{ errors }" name="name" rules="required">
-                      <b-field :message="errors[0]" :type="errors[0]?'is-danger':'is-success'" label="*Quantity">
-                        <textarea v-model="form.request" maxlength="50" min="0" placeholder="e.g. 12"
-                                 type="date">
-                        </textarea>
+                      <b-field :message="errors[0]" :type="errors[0]?'is-danger':'is-success'" label="*Request">
+                        <b-textarea v-model="form.request"
+                                 maxlength="1000" placeholder="e.g. Lorem Ipsum is simply dummy text of the printing and typesetting industry...." type="text" style="height:100px; background-color: #1f1d2b; color: rgb(180, 180, 180); border-color: #424050;">
+                        </b-textarea>
                       </b-field>
                     </validation-provider>
                   </b-col>
                   <b-col class="mt-5" md="12">
                     <b-button :disabled="is_btn_loading" :loading="is_btn_loading" class="ml-5" style="float: right"
-                              type="is-info" @click="createStock">Add</b-button>
+                              type="is-info" @click="createStock">Create</b-button>
                     <b-button class="ml-5" style="float: right" type="is-secondary" @click="closeModal">Cancel
                     </b-button>
                   </b-col>
