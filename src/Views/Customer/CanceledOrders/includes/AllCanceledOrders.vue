@@ -118,7 +118,7 @@ export default {
 
                 this.canceledOrders = respond.map((e, index) => ({
                     order_id: e.canceledorders.orderId,
-                    total: e.canceledorders.total,
+                    total: e.canceledorders.total.toLocaleString("en-US"),
                     item: e.canceledorders.item,
                     qty: e.canceledorders.quantity,
                     reason: e.canceledorders.reason,

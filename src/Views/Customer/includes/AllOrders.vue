@@ -97,6 +97,7 @@ import create_order from './CreateOrder';
 import edit_order from './EditOrder';
 import CustomerApis from '../../../apis/modules/customer_apis/customer_apis';
 import ToastMixin from "../../../mixins/ToastMixin";
+import Logo from "../../../images/logo.png";
 import jspdf from "jspdf";
 import "jspdf-autotable"
 
@@ -169,11 +170,7 @@ export default {
         },
 
         generatePDF() {
-            const doc = new jspdf({
-                orientation: "portrait",
-                unit: "in",
-                format: "letter"
-            });
+            const doc = new jspdf();
 
             const columns = [
                 { title: "Order Id", dataKey: "id" },
@@ -184,6 +181,11 @@ export default {
                 { title: "Order Date", dataKey: "created_at" }
             ];
             const tableRows = [];
+
+            let total = 0;
+            this.orders.slice(0).filter(val => val.status === 'Delivered').forEach((x) => {
+                total = total + x.price * 1
+            })
 
             this.orders.slice(0).filter(val => val.status === 'Delivered').map(e => {
                 let addOrder = {
@@ -196,26 +198,33 @@ export default {
                 };
                 tableRows.push(addOrder);
             });
+            const date = Date().split(" ");
+            const dateStr = date[1] + "-" + date[2] + "-" + date[3];
 
-            doc.text("Workout Report", 14, 20).setFontSize(12);
-            doc.setFillColor(204, 204, 204, 0);
-            // doc.rect(0, 0, 400, 60, "F");
-            // doc.addImage(Logo, "JPEG", 75, 2, 60, 30);
-            doc.setTextColor(0, 0, 0);
+            doc.setFillColor(31, 29, 43);
+            doc.rect(0, 0, 400, 50, "F");
+            doc.addImage(Logo, "JPEG", 75, 2, 60, 30);
+            doc.setTextColor(255, 255, 255);
             doc.setFontSize(15);
-            doc.text(75, 40, "Top 10 Most Viewed Workouts");
+            doc.text(81, 40, "Order Items Report");
+            doc.setTextColor(255, 255, 255);
             doc.setFontSize(10);
+            doc.text(`Report Generated Date - ${dateStr} `, 147, 5);
 
             doc.autoTable({
                 columns,
                 body: tableRows,
-                margin: { left: 0.5, top: 1.25 }
+                styles: {
+                    fontSize: 12,
+                    halign: "center",
+                    backgroundColor: "transparent",
+                },
+                startY: 63,
             });
 
-            const date = Date().split(" ");
-            const dateStr = date[1] + "-" + date[2] + "-" + date[3];
-            doc.text("Order-Details-Report", 14, 15).setFontSize(100);
-            doc.text(`Report Generated Date - ${dateStr} `, 14, 23);
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            doc.text(`Total Costs - Rs.${total.toLocaleString("en-US")} `, 90, 60);
             doc.save(`Order-Details-Report_${dateStr}.pdf`);
 
         },
