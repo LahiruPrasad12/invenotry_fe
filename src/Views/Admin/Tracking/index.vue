@@ -16,10 +16,10 @@
               </div>
               <b-select v-model="selected_status" placeholder="Select a Role" style="margin-left: 5%;">
                 <option style="color: rgb(180, 180, 180);" value="">Select status</option>
-                <option style="color: rgb(180, 180, 180);" value="draft">Draft</option>
-                <option style="color: rgb(180, 180, 180);" value="pending">Pending</option>
-                <option style="color: rgb(180, 180, 180);" value="shipped">Shipped</option>
-                <option style="color: rgb(180, 180, 180);" value="decline">Declined</option>
+                <option style="color: rgb(180, 180, 180);" value="Initiated">Initiated</option>
+                <option style="color: rgb(180, 180, 180);" value="Pending">Pending</option>
+                <option style="color: rgb(180, 180, 180);" value="Delivered">Shipped</option>
+                <option style="color: rgb(180, 180, 180);" value="Decline">Declined</option>
               </b-select>
 
             </div>

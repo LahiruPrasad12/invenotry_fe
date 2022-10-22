@@ -12,7 +12,6 @@
       <b-loading v-model="isLoading" :is-full-page="isFullPage"/>
       <div class="card">
         <header class="card-header" style="font-weight:700; font-size: 20px; color: white;">
-          {{ Item.name }}
         </header>
         <div class="card-content">
           <template>
@@ -23,12 +22,13 @@
                 </b-col>
                 <b-col md="6">
                   <b-field>
-                    <b-select v-model="form.status" :loading="is_selection_loading" expanded
+                    {{currentState}}
+                    <b-select v-model="data.status" :loading="is_selection_loading" expanded
                               placeholder="Select a character">
-                      <option style="color: rgb(180, 180, 180);" value="draft">Draft</option>
-                      <option style="color: rgb(180, 180, 180);" value="pending">Pending</option>
-                      <option style="color: rgb(180, 180, 180);" value="shipped">Shipped</option>
-                      <option style="color: rgb(180, 180, 180);" value="decline">Declined</option>
+                      <option style="color: rgb(180, 180, 180);" value="Initiated">Initiated</option>
+                      <option style="color: rgb(180, 180, 180);" value="Pending">Pending</option>
+                      <option style="color: rgb(180, 180, 180);" value="Delivered">Shipped</option>
+                      <option style="color: rgb(180, 180, 180);" value="Decline">Declined</option>
                     </b-select>
                   </b-field>
                 </b-col>
@@ -51,7 +51,7 @@
                   Price : {{ Item.price }}
                 </b-col>
                 <b-col md="6">
-                  Quantity : {{ Item.qty }}
+                  Quantity : {{ Orders.quantity }}
                 </b-col>
                 <b-col class="mt-5" md="12">
                   {{ Item.description }}
@@ -88,7 +88,7 @@ export default {
     return {
       currentState : '',
       is_selection_loading: false,
-      isLoading: true,
+      isLoading: false,
       isFullPage: false,
       selected: new Date(),
       showWeekNumber: false,
@@ -96,17 +96,19 @@ export default {
       is_create_staff_modal_active: false,
       is_btn_loading: false,
       Item: [],
-      form: {
+      Orders: [],
+      data: {
+        id: '',
+        order_id: '',
+        price: '',
+        item: '',
         qty: '',
         status: '',
-        address: '',
-        item_code: '',
-        _id:''
       }
     }
   },
   watch:{
-  'form.status'(val){
+  'data.status'(val){
     if(val){
       this.is_selection_loading = true
       this.updateState(val)
@@ -117,29 +119,26 @@ export default {
   methods: {
     openModal(data) {
       this.is_create_staff_modal_active = !this.is_create_staff_modal_active
-      this.form = data
-      this.currentState = data.status
-      this.getItemData()
-    },
-
-    async getItemData() {
-      try {
-        this.Item = (await shipping_itemApis.getItem(this.form.item_code)).data.data.Item
-      } catch (e) {
-
-      }
-      this.isLoading = false
+      this.data = data.orders
+      this.Item = data.item
+      this.Orders = data.orders
+      this.currentState = data.orders.status
     },
 
     async updateState(data){
       try{
         if(this.currentState !== data){
-          let payload = {
-            status: data
+          this.data = {
+            id: this.Orders._id,
+            order_id: this.Orders.orderId,
+            price: this.Item.price,
+            item: this.Item.name,
+            qty: this.Orders.quantity,
+            status: data,
           }
-         let respond = await shipping_itemApis.UpdateShippingItems(this.form._id, payload)
+
+         let respond = await shipping_itemApis.UpdateShippingItems({data : this.data})
             this.is_selection_loading = false
-            // this.$emit('updateState')
            this.success('State Updated')
         }
       }catch (e) {
@@ -150,7 +149,7 @@ export default {
 
     closeModal() {
       this.$parent.closeModel()
-      this.form = {}
+      this.data = {}
       this.is_create_staff_modal_active = !this.is_create_staff_modal_active
     }
   }

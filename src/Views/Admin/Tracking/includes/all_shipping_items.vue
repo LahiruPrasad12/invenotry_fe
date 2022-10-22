@@ -19,6 +19,16 @@
             {{ props.row.id }}
           </template>
         </b-table-column>
+        <b-table-column field="user_name" label="User Name">
+          <template v-slot:header="{ column }">
+            <b-tooltip :label="column.label" append-to-body dashed>
+              {{ column.label }}
+            </b-tooltip>
+          </template>
+          <template v-slot="props">
+            {{ props.row.orders.name}}
+          </template>
+        </b-table-column>
         <b-table-column field="item_code" label="Item Code">
           <template v-slot:header="{ column }">
             <b-tooltip :label="column.label" append-to-body dashed>
@@ -26,7 +36,7 @@
             </b-tooltip>
           </template>
           <template v-slot="props">
-            {{ props.row.item_code }}
+            {{ props.row.item.item_code}}
           </template>
         </b-table-column>
         <b-table-column field="qty" label="Quantity">
@@ -36,7 +46,7 @@
             </b-tooltip>
           </template>
           <template v-slot="props">
-            {{ props.row.qty }}
+            {{ props.row.orders.quantity}}
           </template>
         </b-table-column>
         <b-table-column field="status" label="Status">
@@ -46,7 +56,7 @@
             </b-tooltip>
           </template>
           <template v-slot="props">
-            {{ props.row.status }}
+            {{ props.row.orders.status }}
           </template>
         </b-table-column>
 
@@ -119,8 +129,8 @@ export default {
           label: 'Quantity',
         },
         {
-          field: 'address',
-          label: 'Address',
+          field: 'user_name',
+          label: 'User Name',
         },
         {
           field: 'item_code',
@@ -143,13 +153,12 @@ export default {
     async getAllShippingItems(status) {
       try {
         this.is_table_loading = true
-        let respond = (await shippingItemApis.getAllShippingItems(status)).data.data.ShippingItems
+        let respond = (await shippingItemApis.getAllShippingItems(status)).data
+        console.log(respond)
         this.shipping_items = respond.map((e, index) => ({
+          item : e.items,
           id: index + 1,
-          _id:e._id,
-          status: e.status,
-          item_code: e.item,
-          qty: e.qty,
+          orders : e.orders
         }))
       } catch (e) {
 
