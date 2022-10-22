@@ -12,42 +12,35 @@
       <b-loading v-model="isLoading" :is-full-page="isFullPage"/>
       <div class="card">
         <header class="card-header" style="font-weight:700; font-size: 20px; color: white;">
-          {{ Item.name }}
+          {{ form.item.name }}
         </header>
         <div class="card-content">
           <template>
             <section>
               <b-row>
-<!--                <b-col md="3">-->
-
-<!--                </b-col>-->
-                <!--                <b-col md="6">-->
-                <!--                  <h3>Status : {{currentState}}</h3>-->
-
-                <!--                </b-col>-->
-<!--                <b-col md="3">-->
-
-<!--                </b-col>-->
                 <b-col class="mt-5" md="6">
-                  Item Name : {{ Item.name }}
+                  Item Name : {{ form.item.name }}
                 </b-col>
                 <b-col class="mt-5" md="6">
-                  Item Code : {{ Item.item_code }}
+                  Item Code : {{ form.item.item_code }}
+                </b-col>
+<!--                <b-col class="mt-5" md="6">-->
+<!--                  Item Code : {{ form.orders.status }}-->
+<!--                </b-col>-->
+                <b-col md="6">
+                  Brand : {{ form.item.brand }}
                 </b-col>
                 <b-col md="6">
-                  Brand : {{ Item.brand }}
+                  Supplier Id : {{ form.item.supplier_id }}
                 </b-col>
                 <b-col md="6">
-                  Supplier Id : {{ Item.supplier_id }}
+                  Price : {{ form.item.price }}
                 </b-col>
                 <b-col md="6">
-                  Price : {{ Item.price }}
-                </b-col>
-                <b-col md="6">
-                  Quantity : {{ Item.qty }}
+                  Quantity : {{ form.item.qty }}
                 </b-col>
                 <b-col class="mt-5" md="12">
-                  {{ Item.description }}
+                  {{ form.item.description }}
                 </b-col>
                 <b-col md="4">
 
@@ -89,7 +82,7 @@ export default {
     return {
       currentState: '',
       is_selection_loading: false,
-      isLoading: true,
+      isLoading: false,
       isFullPage: false,
       selected: new Date(),
       showWeekNumber: false,
@@ -113,30 +106,20 @@ export default {
       this.is_create_staff_modal_active = !this.is_create_staff_modal_active
       this.form = data
       this.currentState = data.status
-      this.getItemData()
     },
-
-    async getItemData() {
-      try {
-        this.Item = (await shipping_itemApis.getItem(this.form.item_code)).data.data.Item
-      } catch (e) {
-
-      }
-      this.isLoading = false
-    },
-
-
 
     generatePDF() {
-      let pdfName = `shipped-item-${this.Item.item_code}`
+      let pdfName = `shipped-item-${this.form.item.item_code}`
       var doc = new jsPDF();
-      doc.text(`Item Name : ${this.Item.name}`, 60, 10).setFontSize(12);
-      doc.text(`Item Code : ${this.Item.item_code}`, 10, 20).setFontSize(12);
+      doc.text(`Item Name : ${this.form.item.name}`, 70, 10).setFontSize(12);
+      doc.text(`Item Code : ${this.form.item.item_code}`, 10, 20).setFontSize(12);
+
       // doc.text(`Printing Date : ${new Date()}`, 90, 20).setFontSize(8);
-      doc.text(`Item Brand : ${this.Item.brand}`, 10, 25).setFontSize(12);
-      doc.text(`Supplier ID : ${this.Item.supplier_id}`, 10, 30).setFontSize(12);
-      doc.text(`Price : ${this.Item.price}`, 10, 35).setFontSize(12);
-      doc.text(`Item Quantity : ${this.Item.qty}`, 10, 40).setFontSize(12);
+      doc.text(`Item Brand : ${this.form.item.brand}`, 10, 25).setFontSize(12);
+      doc.text(`Supplier ID : ${this.form.item.supplier_id}`, 10, 30).setFontSize(12);
+      doc.text(`Price : ${this.form.item.price}`, 10, 35).setFontSize(12);
+      doc.text(`Item Quantity : ${this.form.item.qty}`, 10, 40).setFontSize(12);
+      doc.text(`Status : ${this.form.orders.status}`, 10, 45).setFontSize(12);
       // doc.text(`Description : ${this.Item.description}`, 10, 45).setFontSize(12);
       // doc.text(`Item Code : ${this.Item.item_code}`, 10, 10);
       // doc.text(`Item Quantity : ${this.Item.qty}`, 10, 10);

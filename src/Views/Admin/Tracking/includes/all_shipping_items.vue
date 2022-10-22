@@ -167,11 +167,10 @@ export default {
     },
 
     generatePDF() {
-      const doc = new jspdf({
-        orientation: "portrait",
-        unit: "in",
-        format: "letter"
-      });
+      const doc = new jspdf();
+      let initiateItems = this.shipping_items.filter((i)=>i.orders.status === 'Initiated')
+      let deliveredItem = this.shipping_items.filter((i)=>i.orders.status === 'Delivered')
+      let pendingItems = this.shipping_items.filter((i)=>i.orders.status === 'Pending')
       // const tableColumn = ["Item Code", "Shipping Status", "Quantity"];
       const columns = [
         { title: "#", dataKey: "id" },
@@ -183,10 +182,10 @@ export default {
 
       this.shipping_items.slice(0).reverse().map(item => {
         let addItem = {
-          id: item.id,
-          item_code: item.item_code,
-          status: item.status,
-          qty: item.qty
+          id: item.item.id,
+          item_code: item.item.item_code,
+          status: item.orders.status,
+          qty: item.orders.qty
         };
         tableRows.push(addItem);
       });
@@ -199,8 +198,11 @@ export default {
 
       const date = Date().split(" ");
       const dateStr = date[1] + "-" + date[2] + "-" + date[3];
-      doc.text("Shipping-Details-Report", 14, 15).setFontSize(12);
-      doc.text(`Report Generated Date - ${dateStr} `, 14, 23);
+      doc.text(`All Items : ${this.shipping_items.length}`, 10, 60).setFontSize(12);
+      doc.text(`Initiated Items : ${initiateItems.length}`, 10, 65).setFontSize(12);
+      doc.text(`Pending Items : ${pendingItems.length}`, 10, 70).setFontSize(12);
+      doc.text(`Pending Items : ${deliveredItem.length}`, 10, 75).setFontSize(12);
+      doc.text(`Report Generated Date - ${dateStr} `, 10, 80).setFontSize(12);
       doc.save(`Shipping-Details-Report_${dateStr}.pdf`);
 
     },
