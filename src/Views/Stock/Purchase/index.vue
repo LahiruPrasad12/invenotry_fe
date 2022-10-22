@@ -16,7 +16,7 @@
             </div>
             <div class="float-end">
               <b-button  type="is-success" @click="makeRequest">Add</b-button>
-              <b-button  type="is-info" >Generate Report</b-button>
+              <b-button  type="is-info" @click="generatePDF">Generate Report</b-button>
             </div>
           </div>
         </header>
@@ -194,7 +194,6 @@ export default {
         { title: "Request", dataKey: "request" },
         { title: "Recived Date", dataKey: "created_at" },
         { title: "Due Date", dataKey: "due_date" },
-        { title: "Updated At", dataKey: "updated_at" },
         { title: "Status", dataKey: "status" }
       ];
       const tableRows = [];
@@ -205,7 +204,6 @@ export default {
           request_code: request.request_code,
           created_at: request.created_at,
           due_date: request.due_date,
-          updated_at: request.updated_at,
           status: request.status
         };
         tableRows.push(addrequest);
