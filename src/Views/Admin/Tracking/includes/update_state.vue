@@ -1,15 +1,8 @@
 <template>
   <section>
-    <b-modal
-      v-model="is_create_staff_modal_active"
-      :destroy-on-hide="false"
-      aria-label="Example Modal"
-      aria-modal
-      aria-role="dialog"
-      close-button-aria-label="Close"
-      has-modal-card
-      trap-focus>
-      <b-loading v-model="isLoading" :is-full-page="isFullPage"/>
+    <b-modal v-model="is_create_staff_modal_active" :destroy-on-hide="false" aria-label="Example Modal" aria-modal
+      aria-role="dialog" close-button-aria-label="Close" has-modal-card trap-focus>
+      <b-loading v-model="isLoading" :is-full-page="isFullPage" />
       <div class="card">
         <header class="card-header" style="font-weight:700; font-size: 20px; color: white;">
         </header>
@@ -24,11 +17,11 @@
                   <b-field>
                     {{currentState}}
                     <b-select v-model="data.status" :loading="is_selection_loading" expanded
-                              placeholder="Select a character">
+                      placeholder="Select a character">
                       <option style="color: rgb(180, 180, 180);" value="Initiated">Initiated</option>
                       <option style="color: rgb(180, 180, 180);" value="Pending">Pending</option>
                       <option style="color: rgb(180, 180, 180);" value="Delivered">Shipped</option>
-                      <option style="color: rgb(180, 180, 180);" value="Decline">Declined</option>
+                      <option style="color: rgb(180, 180, 180);" value="Declined">Declined</option>
                     </b-select>
                   </b-field>
                 </b-col>
@@ -75,7 +68,7 @@
 
 <script>
 import shipping_itemApis from "../../../../apis/modules/admin_pais/shipping_item";
-import {ValidationObserver, ValidationProvider} from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import ToastMixin from "../../../../mixins/ToastMixin";
 
 export default {
@@ -86,7 +79,7 @@ export default {
   mixins: [ToastMixin],
   data() {
     return {
-      currentState : '',
+      currentState: '',
       is_selection_loading: false,
       isLoading: false,
       isFullPage: false,
@@ -107,13 +100,13 @@ export default {
       }
     }
   },
-  watch:{
-  'data.status'(val){
-    if(val){
-      this.is_selection_loading = true
-      this.updateState(val)
+  watch: {
+    'data.status'(val) {
+      if (val) {
+        this.is_selection_loading = true
+        this.updateState(val)
+      }
     }
-  }
   },
 
   methods: {
@@ -125,9 +118,9 @@ export default {
       this.currentState = data.orders.status
     },
 
-    async updateState(data){
-      try{
-        if(this.currentState !== data){
+    async updateState(data) {
+      try {
+        if (this.currentState !== data) {
           this.data = {
             id: this.Orders._id,
             order_id: this.Orders.orderId,
@@ -137,11 +130,11 @@ export default {
             status: data,
           }
 
-         let respond = await shipping_itemApis.UpdateShippingItems({data : this.data})
-            this.is_selection_loading = false
-           this.success('State Updated')
+          let respond = await shipping_itemApis.UpdateShippingItems({ data: this.data })
+          this.is_selection_loading = false
+          this.success('State Updated')
         }
-      }catch (e) {
+      } catch (e) {
 
       }
       this.is_selection_loading = false

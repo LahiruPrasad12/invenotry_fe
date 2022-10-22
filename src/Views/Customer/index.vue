@@ -21,6 +21,7 @@
                                 <option style="color: rgb(180, 180, 180);" value="Pending">Pending</option>
                                 <option style="color: rgb(180, 180, 180);" value="Not Available">Not Available</option>
                                 <option style="color: rgb(180, 180, 180);" value="Delivered">Delivered</option>
+                                <option style="color: rgb(180, 180, 180);" value="Declined">Declined</option>
                             </b-select>
                         </div>
                         <div class="float-end">
