@@ -19,29 +19,25 @@
                                                     style="white-space: pre"></b-input>
                                             </b-field>
                                         </validation-provider>
-                                        <validation-provider #default="{ errors }" name="qty" rules="required">
+                                        <validation-provider #default="{ errors }" name="item" rules="required">
                                             <b-field :message="errors[0]" :type="errors[0] ? 'is-danger' : 'is-success'"
                                                 label="Item*">
                                                 <v-select :options="item" v-model="form.item"
                                                     style="color: rgb(180, 180, 180);" placeholder="Select an Item">
-                                                    <!-- <b-select v-model="form.role" placeholder="Select a role">
-                                                        <option value="" style="color: rgb(180, 180, 180);">Select a role</option>
-                                                        <option value="staff" style="color: rgb(180, 180, 180);">Staff</option>
-                                                        <option value="admin" style="color: rgb(180, 180, 180);">Admin</option>
-                                                        <option value="supplier" style="color: rgb(180, 180, 180);">Supplier</option>
-                                                        <option value="stock-manager" style="color: rgb(180, 180, 180);">Stock Manager</option>
-                                                    </b-select> -->
                                                 </v-select>
                                             </b-field>
                                         </validation-provider>
                                         <br />
                                         <validation-provider #default="{ errors }" name="qty" rules="required">
-                                            <b-field :message="errors[0]" :type="errors[0] ? 'is-danger' : 'is-danger'"
-                                                label="Quantity*">
-                                                <b-input v-model="form.qty" placeholder="E.g. 12" min="1" type="number">
+                                            <b-field :message="errors[0]" :type="errors[0]?'is-danger':'is-success'"
+                                                label="Quantity">
+                                                <b-input v-model="form.qty" maxlength="10" placeholder="e.g. 12"
+                                                    type="number">
                                                 </b-input>
                                             </b-field>
                                         </validation-provider>
+                                        <b-col md="6">
+                                        </b-col>
                                     </b-col>
                                     <b-col class="mt-5" md="12">
                                         <b-button :disabled="is_btn_loading" :loading="is_btn_loading" class="ml-5"

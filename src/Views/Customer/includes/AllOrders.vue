@@ -97,6 +97,8 @@ import create_order from './CreateOrder';
 import edit_order from './EditOrder';
 import CustomerApis from '../../../apis/modules/customer_apis/customer_apis';
 import ToastMixin from "../../../mixins/ToastMixin";
+import jspdf from "jspdf";
+import "jspdf-autotable"
 
 export default {
     name: "index",
@@ -107,6 +109,7 @@ export default {
     },
     data() {
         return {
+            selected_status: undefined,
             fields: [
                 {
                     field: 'order_id',
@@ -122,6 +125,10 @@ export default {
                     label: 'Qty',
                 },
                 {
+                    field: 'price',
+                    label: 'Price',
+                },
+                {
                     field: 'status',
                     label: 'Status',
                 },
@@ -134,12 +141,17 @@ export default {
             is_table_loading: false
         }
     },
+    watch: {
+        selected_status() {
+            this.getAllOrders(this.selected_status)
+        }
+    },
 
     methods: {
-        async getAllOrders() {
+        async getAllOrders(status) {
             try {
                 this.is_table_loading = true
-                let respond = (await CustomerApis.getAllOrders()).data
+                let respond = (await CustomerApis.getAllOrders(status)).data
 
                 this.orders = respond.map((e, index) => ({
                     id: e.orders._id,
@@ -156,8 +168,60 @@ export default {
             this.is_table_loading = false
         },
 
+        generatePDF() {
+            const doc = new jspdf({
+                orientation: "portrait",
+                unit: "in",
+                format: "letter"
+            });
+
+            const columns = [
+                { title: "Order Id", dataKey: "id" },
+                { title: "Item Name", dataKey: "item" },
+                { title: "Quantity", dataKey: "qty" },
+                { title: "Price", dataKey: "price" },
+                { title: "Status", dataKey: "status" },
+                { title: "Order Date", dataKey: "created_at" }
+            ];
+            const tableRows = [];
+
+            this.orders.slice(0).filter(val => val.status === 'Delivered').map(e => {
+                let addOrder = {
+                    id: e.order_id,
+                    price: e.price,
+                    item: e.item,
+                    qty: e.qty,
+                    status: e.status,
+                    created_at: e.created_at.substring(0, 10)
+                };
+                tableRows.push(addOrder);
+            });
+
+            doc.text("Workout Report", 14, 20).setFontSize(12);
+            doc.setFillColor(204, 204, 204, 0);
+            // doc.rect(0, 0, 400, 60, "F");
+            // doc.addImage(Logo, "JPEG", 75, 2, 60, 30);
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(15);
+            doc.text(75, 40, "Top 10 Most Viewed Workouts");
+            doc.setFontSize(10);
+
+            doc.autoTable({
+                columns,
+                body: tableRows,
+                margin: { left: 0.5, top: 1.25 }
+            });
+
+            const date = Date().split(" ");
+            const dateStr = date[1] + "-" + date[2] + "-" + date[3];
+            doc.text("Order-Details-Report", 14, 15).setFontSize(100);
+            doc.text(`Report Generated Date - ${dateStr} `, 14, 23);
+            doc.save(`Order-Details-Report_${dateStr}.pdf`);
+
+        },
+
         closeModel() {
-            this.getAllOrders()
+            this.getAllOrders(this.selected_status)
         },
 
         editOrder(data) {
@@ -184,7 +248,7 @@ export default {
 
                 await CustomerApis.deleteOrder(data.id)
                 this.success('Order Deleted Successfully')
-                await this.getAllOrders()
+                await this.getAllOrders(this.selected_status)
             } catch (e) {
                 this.$buefy.toast.open(e.message)
             }
@@ -192,7 +256,7 @@ export default {
     },
 
     async mounted() {
-        await this.getAllOrders()
+        await this.getAllOrders(this.selected_status)
     }
 }
 </script>
