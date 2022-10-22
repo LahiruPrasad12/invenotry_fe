@@ -18,6 +18,8 @@
                                 <option style="color: rgb(180, 180, 180);" value="">Select Status</option>
                                 <option style="color: rgb(180, 180, 180);" value="">All</option>
                                 <option style="color: rgb(180, 180, 180);" value="Initiated">Initiated</option>
+                                <option style="color: rgb(180, 180, 180);" value="Pending">Pending</option>
+                                <option style="color: rgb(180, 180, 180);" value="Not Available">Not Available</option>
                                 <option style="color: rgb(180, 180, 180);" value="Delivered">Delivered</option>
                             </b-select>
                         </div>
