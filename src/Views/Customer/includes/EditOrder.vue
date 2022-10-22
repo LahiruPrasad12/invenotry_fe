@@ -33,7 +33,7 @@
                                         <validation-provider #default="{ errors }" name="qty" rules="required">
                                             <b-field :message="errors[0]" :type="errors[0]?'is-danger':'is-success'"
                                                 label="Qty">
-                                                <b-input v-model="form.qty" maxlength="10" min="1" placeholder="e.g. 12"
+                                                <b-input v-model="form.qty" maxlength="10" placeholder="e.g. 12"
                                                     type="number">
                                                 </b-input>
                                             </b-field>
