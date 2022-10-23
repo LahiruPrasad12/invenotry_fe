@@ -72,7 +72,9 @@
 
                 <b-table-column field="action" label="Delete">
                     <template v-slot="props">
-                        <b-tooltip label="Delete" position="is-right" target="">
+                        <b-tooltip label="Delete"
+                            v-if="props.row.status === 'Delivered' || props.row.status === 'Initiated' || props.row.status === 'Not Available'"
+                            position="is-right" target="">
                             <b-button outlined style="border: hidden; background-color: #1f1d2b;"
                                 @click="confirmCustomDelete(props.row)">
                                 <svg class="bi bi-trash-fill" fill="red" height="16" viewBox="0 0 16 16" width="16"
